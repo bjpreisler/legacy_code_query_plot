@@ -1,0 +1,99 @@
+from openpyxl import Workbook
+wb = Workbook()
+import MySQLdb
+from datetime import datetime
+
+"""
+    Create a new Excel workbook called variable file_name
+"""
+file_path = ''
+file_name = ''
+
+from openpyxl import load_workbook
+wb = load_workbook(filename = file_path + file_name, read_only=True)
+ws = wb['Sheet1'] # ws is now an IterableWorksheet
+
+
+#print ws['D4'].value        
+"""Connect to database to query DMs"""
+
+db=MySQLdb.connect( host="",
+                    user="python",
+                    passwd="5ksyBpZyrGGYWGnpZE5q3y7aCb4rVE",
+                    db="")
+ 
+"""
+    Create cursor which will allow use to execute a query
+"""
+c=db.cursor()
+
+"""
+    Actual SQL queries to run
+""" 
+
+start_date_object = datetime.strptime('2016-09-01', '%Y-%m-%d')
+end_date_object = datetime.strptime('2016-09-30', '%Y-%m-%d')
+
+
+c.execute("""SELECT ))
+        """ , (start_date_object.date(), end_date_object.date()))
+
+"""
+    Fetch entire row from cursor and store into result object
+"""
+result = c.fetchall()
+              
+"""
+    Close database connection
+"""
+db.close()
+              
+dmfte = result[0][0] / ws['D4'].value
+goal = 3.25
+
+
+# In[3]:
+
+import plotly.plotly as py
+import plotly.graph_objs as go
+import plotly
+plotly.tools.set_credentials_file(username='bjpreisler', api_key='w7hhb1ym9y')
+
+
+
+fig = {
+  "data": [
+    {
+      "values": [goal-dmfte,dmfte],
+      "labels": [
+        "Current DM per FTE","Left to Goal"
+        
+      ],
+      "text":"CO2",
+      "textposition":"inside",
+      "domain": {"x": [.52, 1]},
+      "name": "DM Donut",
+      "hoverinfo":"label+percent+name",
+      "hole": .4,
+      "type": "pie",
+      "marker": {'colors': ['rgb(31, 78, 121)',
+                                  'rgb(255, 255, 255)'],
+                'line': {'color': ['rgb(31, 78, 121)'],
+                                   'width': 1}},
+    }],
+  "layout": {
+        "title":"National Dashboard Metrics",
+        "annotations": [
+            {
+                "font": {
+                    "size": 20
+                },
+                "showarrow": False,
+                "text": "Depth",
+                "x": 0.8,
+                "y": 0.5
+            }
+        ]
+    }
+}
+py.iplot(fig)
