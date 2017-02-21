@@ -19,7 +19,7 @@ ws = wb['Sheet1'] # ws is now an IterableWorksheet
 
 db=MySQLdb.connect( host="",
                     user="python",
-                    passwd="5ksyBpZyrGGYWGnpZE5q3y7aCb4rVE",
+                    passwd="",
                     db="")
  
 """
